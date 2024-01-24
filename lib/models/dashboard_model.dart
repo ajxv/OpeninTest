@@ -53,7 +53,7 @@ class Data {
   List<Link> recentLinks;
   List<Link> topLinks;
   List<dynamic> favouriteLinks;
-  dynamic overallUrlChart;
+  Map<dynamic, dynamic> overallUrlChart;
 
   Data({
     required this.recentLinks,
@@ -122,3 +122,13 @@ class Link {
         isFavourite: json['is_favourite'],
       );
 }
+
+// class ChartData {
+//   DateTime date;
+//   int value;
+
+//   ChartData({
+//     required this.date,
+//     required this.value,
+//   });
+// }

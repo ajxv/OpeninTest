@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:openin_test/screens/sample_screen.dart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -55,25 +56,23 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     String greeting = getGreeting();
 
-    final List<ChartData> chartData = [
-      ChartData(1924, 1),
-      ChartData(1925, 3),
-      ChartData(1926, 3),
-      ChartData(1927, 2),
-      ChartData(1928, 5),
+    // CHART STYLINGS
+    final List<Color> color = <Color>[
+      Colors.blue.shade50.withOpacity(0.5),
+      Colors.blue.shade200.withOpacity(0.5),
+      Colors.blue.withOpacity(0.5),
     ];
-    final List<Color> color = <Color>[];
-    color.add(Colors.blue.shade50.withOpacity(0.5));
-    color.add(Colors.blue.shade200.withOpacity(0.5));
-    color.add(Colors.blue.withOpacity(0.5));
 
-    final List<double> stops = <double>[];
-    stops.add(0.0);
-    stops.add(0.5);
-    stops.add(1.0);
+    final List<double> stops = <double>[
+      0.0,
+      0.5,
+      1.0,
+    ];
 
-    final LinearGradient gradientColors =
-        LinearGradient(colors: color, stops: stops);
+    final LinearGradient gradientColors = LinearGradient(
+      colors: color,
+      stops: stops,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +84,12 @@ class _DashboardState extends State<Dashboard> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SampleScreen(),
+              ),
+            ),
             icon: const Icon(
               Icons.settings_rounded,
               color: Colors.white,
@@ -98,6 +102,14 @@ class _DashboardState extends State<Dashboard> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var dashboardData = snapshot.data!;
+
+            // construct chartData from api reponse
+            final List<ChartData> chartData = dashboardData
+                .data.overallUrlChart.entries
+                .map<ChartData>(
+                    (e) => ChartData(DateTime.parse(e.key), e.value))
+                .toList();
+
             return SafeArea(
               child: ColoredBox(
                 color: Colors.blue.shade600,
@@ -150,18 +162,29 @@ class _DashboardState extends State<Dashboard> {
                                       text: "Overview",
                                       textStyle: TextStyle(color: Colors.grey),
                                       alignment: ChartAlignment.near,
+                                      borderWidth: 8,
                                     ),
-                                    primaryYAxis: const NumericAxis(
-                                        labelFormat: '{value}'),
+                                    primaryXAxis: DateTimeAxis(
+                                      intervalType: DateTimeIntervalType.months,
+                                      rangePadding:
+                                          ChartRangePadding.additional,
+                                      dateFormat: DateFormat.MMM(),
+                                      edgeLabelPlacement:
+                                          EdgeLabelPlacement.shift,
+                                    ),
                                     series: <CartesianSeries>[
                                       // Renders area chart
-                                      AreaSeries<ChartData, int>(
-                                          dataSource: chartData,
-                                          xValueMapper: (ChartData data, _) =>
-                                              data.x,
-                                          yValueMapper: (ChartData data, _) =>
-                                              data.y,
-                                          gradient: gradientColors)
+                                      AreaSeries<ChartData, DateTime>(
+                                        dataSource: chartData,
+                                        borderDrawMode:
+                                            BorderDrawMode.excludeBottom,
+                                        borderColor: Colors.blue,
+                                        xValueMapper: (ChartData data, _) =>
+                                            data.date,
+                                        yValueMapper: (ChartData data, _) =>
+                                            data.value,
+                                        gradient: gradientColors,
+                                      )
                                     ],
                                   ),
                                 ),
@@ -210,7 +233,13 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SampleScreen(),
+                                      ),
+                                    ),
                                     icon: const Icon(Icons.auto_graph_rounded),
                                     label: const Text("View Analytics"),
                                   ),
@@ -281,8 +310,9 @@ class _DashboardState extends State<Dashboard> {
                                                       imageUrl: linkData
                                                           .originalImage,
                                                       linkName: linkData.title,
-                                                      date: linkData.createdAt
-                                                          .toString(),
+                                                      date: DateFormat.yMMMMd()
+                                                          .format(linkData
+                                                              .createdAt),
                                                       linkUrl: linkData.webLink,
                                                       clicks:
                                                           linkData.totalClicks,
@@ -311,7 +341,13 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SampleScreen(),
+                                      ),
+                                    ),
                                     icon: const Icon(Icons.link_rounded),
                                     label: const Text("View all Links"),
                                   ),
@@ -361,7 +397,13 @@ class _DashboardState extends State<Dashboard> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SampleScreen(),
+                                      ),
+                                    ),
                                     icon: const Icon(
                                       Icons.help_outline_rounded,
                                       color: Colors.blue,
@@ -412,7 +454,7 @@ class _DashboardState extends State<Dashboard> {
 }
 
 class ChartData {
-  ChartData(this.x, this.y);
-  final int x;
-  final double y;
+  ChartData(this.date, this.value);
+  final DateTime date;
+  final int value;
 }

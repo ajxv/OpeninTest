@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/dashboard_model.dart';
 
 class ApiServices {
   Future<DashboardData> getDashboardData() async {
-    var accessToken =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU5MjcsImlhdCI6MTY3NDU1MDQ1MH0.dCkW0ox8tbjJA2GgUx2UEwNlbTZ7Rr38PVFJevYcXFI';
+    // api access token stored in .env file for the time being
+    // can be stored in secureStorage later once app has more modules
+    // load .env file
+    await dotenv.load(fileName: 'lib/services/.env');
 
-    Uri url = Uri.parse("https://api.inopenapp.com/api/v1/dashboardNew");
+    var accessToken = dotenv.env['ACCESS_TOKEN'];
+    Uri url = Uri.parse(dotenv.env['API_ENDPOINT']!);
 
     try {
       var response = await http.get(
