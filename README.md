@@ -1,16 +1,11 @@
 # openin_test
 
-A new Flutter project.
+## About
+> A Flutter dashboard page built with test api data as part of Openin Hiring Test
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+<p align="center">
+  <img src="https://github.com/ajxv/OpeninTest/assets/56473062/ffbc35b4-f9e2-493b-87b1-cf19b3c7b251" width="260" /> 
+  <img src="https://github.com/ajxv/OpeninTest/assets/56473062/cb9db54b-8b1c-4771-bc95-618c0dc7f265" width="260" /> 
+  <img src="https://github.com/ajxv/OpeninTest/assets/56473062/7b7a2438-341c-472b-9979-ec10ec459ebf" width="260" /> 
+</p>
