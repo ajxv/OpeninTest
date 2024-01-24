@@ -1,7 +1,10 @@
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LinkCard extends StatelessWidget {
+  final String imageUrl;
   final String linkName;
   final String date;
   final String linkUrl;
@@ -9,6 +12,7 @@ class LinkCard extends StatelessWidget {
 
   const LinkCard({
     super.key,
+    required this.imageUrl,
     required this.linkName,
     required this.date,
     required this.linkUrl,
@@ -18,7 +22,9 @@ class LinkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(10),
       elevation: 0.7,
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
@@ -34,9 +40,20 @@ class LinkCard extends StatelessWidget {
                     color: Colors.grey.shade300,
                   ),
                   borderRadius: BorderRadius.circular(10)),
-              child: Image.asset('assets/logos/amazon_logo.png'),
+              child: Image.network(
+                imageUrl,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return const Center(
+                    child: Icon(Icons.error_outline_rounded),
+                  );
+                },
+              ),
             ),
-            title: Text(linkName),
+            title: Text(
+              linkName,
+              overflow: TextOverflow.ellipsis,
+            ),
             subtitle: Text(
               date,
               style: const TextStyle(color: Colors.grey),
@@ -74,7 +91,12 @@ class LinkCard extends StatelessWidget {
                 style: const TextStyle(color: Colors.blue),
               ),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: linkUrl),
+                  );
+                  Fluttertoast.showToast(msg: "Link copied to clipboard");
+                },
                 icon: const Icon(
                   Icons.copy_rounded,
                   color: Colors.blue,

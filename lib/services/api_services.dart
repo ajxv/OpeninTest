@@ -7,7 +7,7 @@ import '../models/dashboard_model.dart';
 class ApiServices {
   Future<DashboardData> getDashboardData() async {
     var accessToken =
-        'eyJSocketExceptionhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU5MjcsImlhdCI6MTY3NDU1MDQ1MH0.dCkW0ox8tbjJA2GgUx2UEwNlbTZ7Rr38PVFJevYcXFI';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjU5MjcsImlhdCI6MTY3NDU1MDQ1MH0.dCkW0ox8tbjJA2GgUx2UEwNlbTZ7Rr38PVFJevYcXFI';
 
     Uri url = Uri.parse("https://api.inopenapp.com/api/v1/dashboardNew");
 
@@ -20,7 +20,6 @@ class ApiServices {
           'Authorization': 'Bearer $accessToken',
         },
       );
-
       if (response.statusCode == 200) {
         return DashboardData.fromJson(jsonDecode(response.body));
       } else {

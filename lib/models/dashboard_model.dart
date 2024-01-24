@@ -63,10 +63,10 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        recentLinks: List<Link>.from(json['recent_links']
-            .map((x) => Link.fromJson(json['recent_links']))),
-        topLinks: List<Link>.from(
-            json['recent_links'].map((x) => Link.fromJson(json['top_links']))),
+        recentLinks:
+            List<Link>.from(json['recent_links'].map((x) => Link.fromJson(x))),
+        topLinks:
+            List<Link>.from(json['recent_links'].map((x) => Link.fromJson(x))),
         favouriteLinks: json['favourite_links'],
         overallUrlChart: json['overall_url_chart'],
       );
@@ -114,7 +114,7 @@ class Link {
         originalImage: json['original_image'],
         thumbnail: json['thumbnail'],
         timesAgo: json['times_ago'],
-        createdAt: json['created_at'],
+        createdAt: DateTime.parse(json['created_at']),
         domainId: json['domain_id'],
         urlPrefix: json['url_prefix'],
         urlSuffix: json['url_suffix'],
